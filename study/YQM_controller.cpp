@@ -74,6 +74,7 @@ namespace rm_control_study {
         joint_handles_.push_back(ctrl_rf_.joint_);
         joint_handles_.push_back(ctrl_lb_.joint_);
         joint_handles_.push_back(ctrl_rb_.joint_);
+
         //返回-----------------------------------------------------------------------------------------------------------
         return true;
     }
