@@ -119,6 +119,7 @@ namespace rm_control_study {
         //获取小车底盘速度-------------------------------------------------------------------------------------------------
         geometry_msgs::Twist vel_base = forwardKinematics();
 
+
         if (enable_odom_tf_) {
             //获取base_link相对与odom的位置关系
             geometry_msgs::Vector3 linear_vel_odom, angular_vel_odom;
@@ -129,7 +130,6 @@ namespace rm_control_study {
                 ROS_WARN("%s", ex.what());
                 return;
             }
-
             //doTransform将base的速度通过关系变为Odom的速度存到vector3里面
             // 设原odom为一个固定点，移动odom获取关于固定点的相对位置
             odom2base_.header.stamp = time;
@@ -151,7 +151,6 @@ namespace rm_control_study {
                 odom2base_quat.normalize();
                 odom2base_.transform.rotation = tf2::toMsg(odom2base_quat);
             }
-
             //广播tf
             tf_broadcaster_.sendTransform(odom2base_);
         }
@@ -170,7 +169,7 @@ namespace rm_control_study {
     }  // ChassisBase::updateOdom
 
     //力学，底盘数据******************************************************************************************************
-    geometry_msgs::Twist MecanumController::forwardKinematics() {
+    geometry_msgs::Twist ChassisBase::forwardKinematics() {
         geometry_msgs::Twist vel_data;
         double k = wheel_radius_ / 4.0;
         double lf_velocity = ctrl_lf_.joint_.getVelocity();
@@ -184,7 +183,7 @@ namespace rm_control_study {
     }
 
     //给轮子分配速度******************************************************************************************************
-    void MecanumController::moveJoint(const ros::Time &time, const ros::Duration &period) {
+    void ChassisBase::moveJoint(const ros::Time &time, const ros::Duration &period) {
         double a = (wheel_base_ + wheel_track_) / 2.0;
         ctrl_lf_.setCommand((vel_cmd_.x - vel_cmd_.y - vel_cmd_.z * a) / wheel_radius_);
         ctrl_rf_.setCommand((vel_cmd_.x + vel_cmd_.y + vel_cmd_.z * a) / wheel_radius_);
