@@ -57,19 +57,19 @@ namespace rm_control_study {
         cmd_vel_sub_ = root_nh.subscribe<geometry_msgs::Twist>("cmd_vel", 1, &ChassisBase::cmdVelCallback, this);
 
         //mecarnum
-        //创造四个轮子句柄------------------------------------------------------------------------------------------------
+        //创造四个轮子句柄-------------------------------------------------------------------------------------------------
         ros::NodeHandle nh_lf = ros::NodeHandle(controller_nh, "left_front");
         ros::NodeHandle nh_rf = ros::NodeHandle(controller_nh, "right_front");
         ros::NodeHandle nh_lb = ros::NodeHandle(controller_nh, "left_back");
         ros::NodeHandle nh_rb = ros::NodeHandle(controller_nh, "right_back");
 
-        //ctrl是否初始化-------------------------------------------------------------------------------------------------
+        //ctrl是否初始化--------------------------------------------------------------------------------------------------
         if (!ctrl_lf_.init(effort_joint_interface_, nh_lf) || !ctrl_rf_.init(effort_joint_interface_, nh_rf) ||
             !ctrl_lb_.init(effort_joint_interface_, nh_lb) || !ctrl_rb_.init(effort_joint_interface_, nh_rb)) {
             return false;
         }
 
-        //放在维克多容器后面？？？-----------------------------------------------------------------------------------------
+        //放在维克多容器后面？？？------------------------------------------------------------------------------------------
         joint_handles_.push_back(ctrl_lf_.joint_);
         joint_handles_.push_back(ctrl_rf_.joint_);
         joint_handles_.push_back(ctrl_lb_.joint_);
